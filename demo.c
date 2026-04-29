@@ -20,6 +20,32 @@ void arrayMenu() {
                 insertAt(arr, &size, index, value);
                 break;
             /* ... other cases ... */
+            case 2:
+            printf("Index and value: ");
+                scanf("%d %d", &index, &value);
+                  deleteAt( arr, &size, index);
+                break;
+
+            case 3:
+                printf("Index and value: ");
+                scanf("%d %d", &index, &value);
+                linearSearch(arr, &size,  value);
+                break;
+            case 4:
+            printf("Index and value: ");
+                scanf("%d %d", &index, &value);
+                
+                break;
+            case 5: 
+            printf("Index and value: ");
+                scanf("%d %d", &index, &value);
+                
+                break;
+            case 0:
+
+            
+
+
         }
     } while (choice != 0);
 }
