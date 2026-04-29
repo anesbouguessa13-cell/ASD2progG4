@@ -41,7 +41,7 @@ void arrayMenu() {
                 scanf("%d %d", &index, &value);
                 
                 break;
-            case 0:
+            
 
             
 
