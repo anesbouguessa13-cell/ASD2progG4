@@ -19,14 +19,14 @@ void arrayMenu() {
                 scanf("%d %d", &index, &value);
                 insertAt(arr, &size, index, value);
                 break;
-            /* ... other cases ... */
-            case 2:
-            printf("Index and value: ");
+            
+           /* case 2:
+                printf("Index and value: ");
                 scanf("%d %d", &index, &value);
-                  deleteAt( arr, &size, index);
-                break;
+                deleteAt(arr, &size, index);
+                break;*/
 
-            case 3:
+           /* case 3:
                 printf("Index and value: ");
                 scanf("%d %d", &index, &value);
                 linearSearch(arr, &size,  value);
@@ -40,7 +40,7 @@ void arrayMenu() {
             printf("Index and value: ");
                 scanf("%d %d", &index, &value);
                 
-                break;
+                break;*/
             
 
             
