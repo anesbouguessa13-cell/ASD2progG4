@@ -4,7 +4,7 @@
 //#include "include/stack.h"
 //#include "include/queue.h"
 //#include "include/file_utils.h"
-//#include "include/string_utils.h"
+//#include "include/string.h"
 
 void arrayMenu() {
     int choice, arr[MAX_1D], size = 0, value, index;
@@ -48,6 +48,9 @@ void arrayMenu() {
 
         }
     } while (choice != 0);
+}
+void string_utils(){
+    
 }
 
 int main() {

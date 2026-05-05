@@ -162,28 +162,271 @@ void  insertionSort(int arr[], int size){
 
 
 void  mergeSort(int arr[], int left, int right){
+      int i, j, k,mid;
+    int n1 = mid - left + 1;
+    int n2 = right - mid;
+
     
+    int L[n1], R[n2];
+
+    
+    for (i = 0; i < n1; i++) L[i] = arr[left + i];
+    for (j = 0; j < n2; j++) R[j] = arr[mid + 1 + j];
+
+  
+    i = 0; 
+    j = 0;
+    k = left; 
+    
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) {
+            arr[k] = L[i];
+            i++;
+        } else {
+            arr[k] = R[j];
+            j++;
+        }
+        k++;
+    }
+
+    
+    while (i < n1) {
+        arr[k] = L[i];
+        i++;
+        k++;
+    }
+
+    
+    while (j < n2) {
+        arr[k] = R[j];
+        j++;
+        k++;
+    }
 }
-void  quickSort(int arr[], int low, int high){}
-int   findMax(int arr[], int size){}
-int   findMin(int arr[], int size){}
-int   sumArray(int arr[], int size){}
-double averageArray(int arr[], int size){}
-void  reverseArray(int arr[], int size){}
-void  rotateLeft(int arr[], int size, int k){}
-void  mergeSortedArrays(int a[], int na, int b[], int nb, int out[]){}
+void  quickSort(int arr[], int low, int high){
+    
+   
+    int pivot = arr[high]; 
+    int i = (low - 1);    
+
+    for (int j = low; j < high; j++) {
+        
+        if (arr[j] <= pivot) {
+            i++; 
+            
+            int temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+        }
+    }
+
+    
+    int temp = arr[i + 1];
+    arr[i + 1] = arr[high];
+    arr[high] = temp;
+
+    return (i + 1); 
+}
+
+
+int   findMax(int arr[], int size){
+    
+    int maxVal = arr[0];
+
+    for (int i = 1; i < size; i++) {
+        if (arr[i] > maxVal) {
+            maxVal = arr[i];
+        }
+    }
+
+    return maxVal;
+}
+
+
+int findMin(int arr[], int size) {
+    
+    int minVal = arr[0];
+
+    for (int i = 1; i < size; i++) {
+        if (arr[i] < minVal) {
+            minVal = arr[i];
+        }
+    }
+
+    return minVal;
+}
+
+
+int   sumArray(int arr[], int size){
+    
+    int total = 0;
+
+    for (int i = 0; i < size; i++) {
+        total += arr[i];
+    }
+
+    return total;
+
+}
+double averageArray(int arr[], int size){
+    
+    if (size <= 0) {
+        return 0.0;
+    }
+
+    int total = 0;
+    for (int i = 0; i < size; i++) {
+        total += arr[i];
+    }
+
+    return (double)total / size;
+
+}
+void  reverseArray(int arr[], int size){
+    
+    for (int i = 0; i < size / 2; i++) {
+        int temp = arr[i];
+        arr[i] = arr[size - 1 - i];
+        arr[size - 1 - i] = temp;
+    }
+
+}
+
+
+void rotateLeft(int arr[], int size, int k) {
+    if (size <= 0) return;
+    
+    k = k % size;
+    if (k == 0) return;
+
+    reverse(arr, 0, k - 1);
+    reverse(arr, k, size - 1);
+    reverse(arr, 0, size - 1);
+}
+
+void  mergeSortedArrays(int a[], int na, int b[], int nb, int out[]){
+    
+    int i = 0;
+    int j = 0;
+    int k = 0;
+
+    while (i < na && j < nb) {
+        if (a[i] <= b[j]) {
+            out[k] = a[i];
+            i++;
+        } else {
+            out[k] = b[j];
+            j++;
+        }
+        k++;
+    }
+
+    while (i < na) {
+        out[k] = a[i];
+        i++;
+        k++;
+    }
+
+    while (j < nb) {
+        out[k] = b[j];
+        j++;
+        k++;
+    }
+
+}
 
 /* --- 2D Matrix --- */
-void  initMatrix(int m[][MAX_COLS], int* rows, int* cols){}
-void  printMatrix(int m[][MAX_COLS], int rows, int cols){}
-void  transposeMatrix(int m[][MAX_COLS], int rows, int cols, int out[][MAX_COLS]){}
-void  addMatrices(int a[][MAX_COLS], int b[][MAX_COLS], int r[][MAX_COLS], int rows, int cols){}
-void  multiplyMatrices(int a[][MAX_COLS], int b[][MAX_COLS], int r[][MAX_COLS], int n){}
+void  initMatrix(int m[][MAX_COLS], int* rows, int* cols){
+    #include <stdio.h>
+
+#define MAX_ROWS 100
+#define MAX_COLS 100
+
+
+    int r, c;
+
+    printf("Enter rows and columns (max %d each): ", MAX_ROWS);
+    scanf("%d %d", &r, &c);
+
+    if (r > MAX_ROWS) r = MAX_ROWS;
+    if (c > MAX_COLS) c = MAX_COLS;
+    if (r < 0) r = 0;
+    if (c < 0) c = 0;
+
+    *rows = r;
+    *cols = c;
+
+    for (int i = 0; i < *rows; i++) {
+        for (int j = 0; j < *cols; j++) {
+            printf("Enter element [%d][%d]: ", i, j);
+            scanf("%d", &m[i][j]);
+        }
+    }
+
+}
+void  printMatrix(int m[][MAX_COLS], int rows, int cols){
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            printf("%4d", m[i][j]);
+        }
+        printf("\n");
+    }
+}
+void  transposeMatrix(int m[][MAX_COLS], int rows, int cols, int out[][MAX_COLS]){
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            out[j][i] = m[i][j];
+        }
+    }
+}
+void  addMatrices(int a[][MAX_COLS], int b[][MAX_COLS], int r[][MAX_COLS], int rows, int cols){
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            r[i][j] = a[i][j] + b[i][j];
+        }
+    }
+}
+void  multiplyMatrices(int a[][MAX_COLS], int b[][MAX_COLS], int r[][MAX_COLS], int n){
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            r[i][j] = 0;
+            for (int k = 0; k < n; k++) {
+                r[i][j] += a[i][k] * b[k][j];
+            }
+        }
+    }
+}
 
 /* --- Dynamic Array --- */
-int*  createDynamicArray(int capacity){}
-void  fillArray(int* arr, int size){}
-void  printDynamicArray(int* arr, int size){}
-int*  resizeArray(int* arr, int newCapacity){}
-void  freeArray(int* arr){}
+int*  createDynamicArray(int capacity){
+    int* arr = (int*)malloc(capacity * sizeof(int));
+    
+    if (arr == NULL) {
+        printf("Error: Memory allocation failed.\n");
+        return NULL;
+    }
+    
+    return arr;
+}
+void  fillArray(int* arr, int size){
+    for (int i = 0; i < size; i++) {
+        scanf("%d", &arr[i]);
+    }
+}
+
+int*  resizeArray(int* arr, int newCapacity){
+    int newCapacity;
+    int* temp = (int*)realloc(arr, newCapacity * sizeof(int));
+
+    if (temp == NULL) {
+        printf("Error: Memory reallocation failed.\n");
+        return NULL;
+    }
+
+    return temp;
+}
+void  freeArray(int* arr){
+    free(arr);
+    arr = NULL;
+}
 
