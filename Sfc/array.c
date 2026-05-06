@@ -337,10 +337,7 @@ void  mergeSortedArrays(int a[], int na, int b[], int nb, int out[]){
 
 /* --- 2D Matrix --- */
 void  initMatrix(int m[][MAX_COLS], int* rows, int* cols){
-    #include <stdio.h>
-
-#define MAX_ROWS 100
-#define MAX_COLS 100
+   
 
 
     int r, c;
