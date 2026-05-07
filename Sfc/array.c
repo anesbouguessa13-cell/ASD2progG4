@@ -225,7 +225,7 @@ void  quickSort(int arr[], int low, int high){
     arr[i + 1] = arr[high];
     arr[high] = temp;
 
-    return (i + 1); 
+     
 }
 
 
@@ -299,9 +299,7 @@ void rotateLeft(int arr[], int size, int k) {
     k = k % size;
     if (k == 0) return;
 
-    reverse(arr, 0, k - 1);
-    reverse(arr, k, size - 1);
-    reverse(arr, 0, size - 1);
+    
 }
 
 void  mergeSortedArrays(int a[], int na, int b[], int nb, int out[]){
@@ -412,7 +410,7 @@ void  fillArray(int* arr, int size){
 }
 
 int*  resizeArray(int* arr, int newCapacity){
-    int newCapacity;
+    
     int* temp = (int*)realloc(arr, newCapacity * sizeof(int));
 
     if (temp == NULL) {
