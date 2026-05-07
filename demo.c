@@ -6,15 +6,12 @@
 //#include "include/file_utils.h"
 #include "include/string_utils.h"
 #include<string.h>
-
-
 #include <stdlib.h>
 
 // 1. MOVE MACROS OUTSIDE: Macros should be global, not inside a function.
 
 
-#include <stdio.h>
-#include <stdlib.h>
+
 
 
 void arrayMenu() {
@@ -157,7 +154,7 @@ int main() {
         scanf("%d", &choice);
         switch(choice) {
             case 1: arrayMenu(); break;
-            case 2: string_utils();break;
+            case 6: string_utils();break;
         }
     } while (choice != 0);
     return 0;

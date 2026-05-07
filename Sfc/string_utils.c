@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <ctype.h>
+#include <string.h>
 
 int my_strlen(const char* s){
     int i;
@@ -142,7 +143,7 @@ int countVowels(const char* s){
             inWord = true;
             count++;
         }}
-        }
+ }
 int countWords(const char* s){
     int count = 0;
     bool inWord = false; 
@@ -209,7 +210,7 @@ void removeSpaces(char* s){
     s[j] = '\0';
 }
 void substring(const char* src, int start, int len, char* dest){
-    #include <string.h>
+    
 
 
     int src_len = strlen(src);
@@ -232,7 +233,7 @@ void substring(const char* src, int start, int len, char* dest){
 
 }
 int compareIgnoreCase(const char* a, const char* b){
-    #include <ctype.h>
+    
 
 
     
