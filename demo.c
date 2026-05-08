@@ -142,125 +142,114 @@ void arrayMenu() {
 #define MAX 1024
 
 void string_utils() {
+   
     char str[MAX], other[MAX], result[MAX];
     int choice, n, start, len;
     char c;
 
-    while (1) {
+    do {
         printf("\n--- STRING UTILITIES MENU ---\n");
-        printf("1. Length (strlen)         9. Reverse String\n");
-        printf("2. Copy (strcpy)          10. Count Vowels\n");
-        printf("3. N-Copy (strncpy)       11. Count Words\n");
-        printf("4. Concatenate (strcat)   12. Check Palindrome\n");
-        printf("5. Compare (strcmp)       13. Remove Character\n");
-        printf("6. N-Compare (strncmp)    14. Remove Spaces\n");
-        printf("7. To Upper Case          15. Extract Substring\n");
-        printf("8. To Lower Case          16. Compare (Ignore Case)\n");
-        printf("0. Back to Main Menu\n");
+        printf("1. Length (strlen)\n2. Copy (strcpy)\n3. N-Copy (strncpy)\n4. Concatenate (strcat)\n");
+        printf("5. Compare (strcmp)\n7. To Upper Case\n9. Reverse String\n");
+        printf("11. Count Words\n12. Check Palindrome\n13. Remove Character\n");
+        printf("15. Extract Substring\n16. Compare (Ignore Case)\n0. Exit\n");
         printf("Choice: ");
-        scanf("%d", &choice);
-        getchar(); // Clear newline buffer
-
-        if (choice == 0) break;
+        
+        if (scanf("%d", &choice) != 1) break;
+        while (getchar() != '\n'); // CRITICAL: Clears the buffer so fgets works
 
         switch (choice) {
-            case 1:
+            case 1: {
                 printf("Enter string: ");
                 fgets(str, MAX, stdin); str[strcspn(str, "\n")] = 0;
-                printf("Length: %d\n", my_strlen(str));
+                int l = my_strlen(str);
+                printf("RESULT: The length is %d\n", l); // Added explicit print
                 break;
-
-            case 2:
+            }
+            case 2: {
                 printf("Enter source string: ");
                 fgets(str, MAX, stdin); str[strcspn(str, "\n")] = 0;
                 my_strcpy(result, str);
-                printf("Copied string: %s\n", result);
+                printf("RESULT: Copied string is [%s]\n", result);
                 break;
-
-            case 3:
+            }
+            case 3: {
                 printf("Enter source: ");
                 fgets(str, MAX, stdin); str[strcspn(str, "\n")] = 0;
                 printf("Enter N: "); scanf("%d", &n);
                 my_strncpy(result, str, n);
-                result[n] = '\0'; // Ensure safety
-                printf("N-Copied: %s\n", result);
+                result[n] = '\0'; 
+                printf("RESULT: N-Copied string: %s\n", result);
                 break;
-
-            case 4:
-                printf("Enter first string: ");
+            }
+            case 4: {
+                printf("Enter base string: ");
                 fgets(str, MAX, stdin); str[strcspn(str, "\n")] = 0;
                 printf("Enter string to append: ");
                 fgets(other, MAX, stdin); other[strcspn(other, "\n")] = 0;
                 my_strcat(str, other);
-                printf("Result: %s\n", str);
+                printf("RESULT: Combined string: %s\n", str);
                 break;
-
-            case 5:
-                printf("Enter String A: ");
-                fgets(str, MAX, stdin); str[strcspn(str, "\n")] = 0;
-                printf("Enter String B: ");
-                fgets(other, MAX, stdin); other[strcspn(other, "\n")] = 0;
-                printf("Comparison result: %d\n", my_strcmp(str, other));
+            }
+            case 5: {
+                printf("String A: "); fgets(str, MAX, stdin); str[strcspn(str, "\n")] = 0;
+                printf("String B: "); fgets(other, MAX, stdin); other[strcspn(other, "\n")] = 0;
+                printf("RESULT: Comparison value: %d\n", my_strcmp(str, other));
                 break;
-
-            case 7:
+            }
+            case 7: {
                 printf("Enter string: ");
                 fgets(str, MAX, stdin); str[strcspn(str, "\n")] = 0;
                 toUpperCase(str);
-                printf("Uppercase: %s\n", str);
+                printf("RESULT: Uppercase version: %s\n", str);
                 break;
-
-            case 9:
+            }
+            case 9: {
                 printf("Enter string: ");
                 fgets(str, MAX, stdin); str[strcspn(str, "\n")] = 0;
                 reverseString(str);
-                printf("Reversed: %s\n", str);
+                printf("RESULT: Reversed string: %s\n", str);
                 break;
-
-            case 11:
+            }
+            case 11: {
                 printf("Enter sentence: ");
                 fgets(str, MAX, stdin); str[strcspn(str, "\n")] = 0;
-                printf("Word count: %d\n", countWords(str));
+                printf("RESULT: Total words: %d\n", countWords(str));
                 break;
-
-            case 12:
+            }
+            case 12: {
                 printf("Enter string: ");
                 fgets(str, MAX, stdin); str[strcspn(str, "\n")] = 0;
-                if (isPalindrome(str)) printf("It is a palindrome.\n");
-                else printf("Not a palindrome.\n");
+                if (isPalindrome(str)) printf("RESULT: It IS a palindrome.\n");
+                else printf("RESULT: It is NOT a palindrome.\n");
                 break;
-
-            case 13:
+            }
+            case 13: {
                 printf("Enter string: ");
                 fgets(str, MAX, stdin); str[strcspn(str, "\n")] = 0;
-                printf("Enter character to remove: ");
-                scanf(" %c", &c);
+                printf("Char to remove: "); scanf(" %c", &c);
                 removeChar(str, c);
-                printf("Result: %s\n", str);
+                printf("RESULT: String after removal: %s\n", str);
                 break;
-
-            case 15:
-                printf("Enter source string: ");
-                fgets(str, MAX, stdin); str[strcspn(str, "\n")] = 0;
-                printf("Enter start index and length: ");
-                scanf("%d %d", &start, &len);
+            }
+            case 15: {
+                printf("Source: "); fgets(str, MAX, stdin); str[strcspn(str, "\n")] = 0;
+                printf("Start index and length: "); scanf("%d %d", &start, &len);
                 substring(str, start, len, result);
-                printf("Substring: %s\n", result);
+                printf("RESULT: Substring: %s\n", result);
                 break;
-
-            case 16:
-                printf("Enter String A: ");
-                fgets(str, MAX, stdin); str[strcspn(str, "\n")] = 0;
-                printf("Enter String B: ");
-                fgets(other, MAX, stdin); other[strcspn(other, "\n")] = 0;
-                printf("Comparison (Ignore Case): %d\n", compareIgnoreCase(str, other));
+            }
+            case 16: {
+                printf("String A: "); fgets(str, MAX, stdin); str[strcspn(str, "\n")] = 0;
+                printf("String B: "); fgets(other, MAX, stdin); other[strcspn(other, "\n")] = 0;
+                printf("RESULT: Case-insensitive diff: %d\n", compareIgnoreCase(str, other));
                 break;
-
-            default:
-                printf("Feature not yet implemented or invalid choice.\n");
+            }
         }
-    }
+    } while (choice != 0);
 }
+    
+
  
 
 
