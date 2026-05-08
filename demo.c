@@ -141,7 +141,7 @@ void arrayMenu() {
 
 #define MAX 1024
 
-void string_utils_menu() {
+void string_utils() {
     char str[MAX], other[MAX], result[MAX];
     int choice, n, start, len;
     char c;
