@@ -1,23 +1,28 @@
-#ifndef QUEUE_H
-#define QUEUE_H
+#ifndef LINKED_LIST_H
+#define LINKED_LIST_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <limits.h>
+#include "common.h" // Include your common types here!
 
-#define MAX_QUEUE_SIZE 100
+// SLL Cursor-Based Prototypes
+void initList(ArrayList* L);
+int insertBeginning(ArrayList* L, int value);
+int insertEnd(ArrayList* L, int value);
+int insertAtPosition(ArrayList* L, int pos, int value);
+int deleteBeginning(ArrayList* L);
+int deleteEnd(ArrayList* L);
+int deleteByValue(ArrayList* L, int value);
+int searchValue(ArrayList* L, int value); // Returns index instead of Node*
+void displayList(ArrayList* L);
+void reverseList(ArrayList* L);
+void sortListBubble(ArrayList* L);
+void mergeSortedLists(ArrayList* A, ArrayList* B, ArrayList* result);
 
-typedef struct {
-    int data[MAX_QUEUE_SIZE];
-    int front;
-    int rear;
-    int count;
-} Queue;
-
-void initQueue(Queue* Q);
-int enqueue(Queue* Q, int value);
-int dequeue(Queue* Q);
-int front(Queue* Q);
-int rear(Queue* Q);
+// DLL Cursor-Based Prototypes
+void initListDLL(DLL* L);
+int insertBeginningDLL(DLL* L, int value);
+int insertEndDLL(DLL* L, int value);
+int deleteByValueDLL(DLL* L, int value);
+void displayForward(DLL* L);
+void displayBackward(DLL* L);
 
 #endif
