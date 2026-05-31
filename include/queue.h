@@ -1,7 +1,7 @@
 #ifndef QUEUE_H
 #define QUEUE_H
 
-#include "../include/common.h"
+#include "common.h"
 #include <limits.h>
 
 void initQueue(Queue* Q);

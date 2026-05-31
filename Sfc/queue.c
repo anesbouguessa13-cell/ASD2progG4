@@ -7,9 +7,7 @@ void initQueue(Queue* Q) {
 }
 
 int enqueue(Queue* Q, int value) {
-    if (Q->count == MAX_QUEUE_SIZE) {
-        return -1;
-    }
+    if (Q->count == MAX_QUEUE_SIZE) return -1;
     Q->data[Q->rear] = value;
     Q->rear = (Q->rear + 1) % MAX_QUEUE_SIZE;
     Q->count++;
@@ -17,9 +15,7 @@ int enqueue(Queue* Q, int value) {
 }
 
 int dequeue(Queue* Q) {
-    if (Q->count == 0) {
-        return INT_MIN;
-    }
+    if (Q->count == 0) return INT_MIN;
     int dequeuedValue = Q->data[Q->front];
     Q->front = (Q->front + 1) % MAX_QUEUE_SIZE;
     Q->count--;
@@ -27,15 +23,11 @@ int dequeue(Queue* Q) {
 }
 
 int front(Queue* Q) {
-    if (Q->count == 0) {
-        return INT_MIN;
-    }
+    if (Q->count == 0) return INT_MIN;
     return Q->data[Q->front];
 }
 
 int rear(Queue* Q) {
-    if (Q->count == 0) {
-        return INT_MIN;
-    }
+    if (Q->count == 0) return INT_MIN;
     return Q->data[(Q->rear - 1 + MAX_QUEUE_SIZE) % MAX_QUEUE_SIZE];
 }

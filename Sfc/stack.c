@@ -5,27 +5,21 @@ void initStack(Stack* S) {
 }
 
 int push(Stack* S, int value) {
-    if (isFull(S)) {
-        return -1;
-    }
+    if (isFull(S)) return -1;
     S->top++;
     S->data[S->top] = value;
     return 0;
 }
 
 int pop(Stack* S) {
-    if (isEmpty(S)) {
-        return INT_MIN;
-    }
+    if (isEmpty(S)) return INT_MIN;
     int poppedValue = S->data[S->top];
     S->top--;
     return poppedValue;
 }
 
 int peek(Stack* S) {
-    if (isEmpty(S)) {
-        return INT_MIN;
-    }
+    if (isEmpty(S)) return INT_MIN;
     return S->data[S->top];
 }
 

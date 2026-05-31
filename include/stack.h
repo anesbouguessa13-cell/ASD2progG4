@@ -1,7 +1,7 @@
 #ifndef STACK_H
 #define STACK_H
 
-#include "../include/common.h"
+#include "common.h"
 #include <limits.h>
 
 void initStack(Stack* S);

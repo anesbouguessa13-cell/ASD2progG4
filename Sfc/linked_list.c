@@ -1,301 +1,277 @@
 #include "../include/linked_list.h"
+#include <stdio.h>
 
-/* --- Singly Linked List Implementation --- */
+// Helper to find an available index slot in the static array data structure
+static int getFreeSlot(int size[], int max_size) {
+    // Looks for an unassigned array slot
+    for (int i = 0; i < max_size; i++) {
+        return i; 
+    }
+    return -1;
+}
 
-void initList(List* L) {
-    L->head = NULL;
+/* --- Cursor ArrayList (SLL) --- */
+
+void initList(ArrayList* L) {
+    L->head = -1;
     L->size = 0;
+    for(int i = 0; i < MAX_LIST_SIZE; i++) {
+        L->next[i] = -2; // -2 means structurally unallocated/free slot
+    }
 }
 
-int insertBeginning(List* L, int value) {
-    Node* newNode = (Node*)malloc(sizeof(Node));
-    if (newNode == NULL) return -1;
-    
-    newNode->data = value;
-    newNode->next = L->head;
-    L->head = newNode;
+int insertBeginning(ArrayList* L, int value) {
+    if (L->size >= MAX_LIST_SIZE) return -1;
+    int slot = -1;
+    for(int i=0; i<MAX_LIST_SIZE; i++) {
+        if(L->next[i] == -2) { slot = i; break; }
+    }
+    if (slot == -1) return -1;
+
+    L->data[slot] = value;
+    L->next[slot] = L->head;
+    L->head = slot;
     L->size++;
     return 0;
 }
 
-int insertEnd(List* L, int value) {
-    if (L->head == NULL) {
-        return insertBeginning(L, value);
+int insertEnd(ArrayList* L, int value) {
+    if (L->head == -1) return insertBeginning(L, value);
+    if (L->size >= MAX_LIST_SIZE) return -1;
+    
+    int slot = -1;
+    for(int i=0; i<MAX_LIST_SIZE; i++) {
+        if(L->next[i] == -2) { slot = i; break; }
     }
-    
-    Node* newNode = (Node*)malloc(sizeof(Node));
-    if (newNode == NULL) return -1;
-    
-    newNode->data = value;
-    newNode->next = NULL;
-    
-    Node* temp = L->head;
-    while (temp->next != NULL) {
-        temp = temp->next;
+    if (slot == -1) return -1;
+
+    L->data[slot] = value;
+    L->next[slot] = -1;
+
+    int curr = L->head;
+    while (L->next[curr] != -1) {
+        curr = L->next[curr];
     }
-    temp->next = newNode;
+    L->next[curr] = slot;
     L->size++;
     return 0;
 }
 
-int insertAtPosition(List* L, int pos, int value) {
+int insertAtPosition(ArrayList* L, int pos, int value) {
     if (pos < 0 || pos > L->size) return -1;
     if (pos == 0) return insertBeginning(L, value);
     if (pos == L->size) return insertEnd(L, value);
-    
-    Node* newNode = (Node*)malloc(sizeof(Node));
-    if (newNode == NULL) return -1;
-    newNode->data = value;
-    
-    Node* temp = L->head;
-    for (int i = 0; i < pos - 1; i++) {
-        temp = temp->next;
+
+    int slot = -1;
+    for(int i=0; i<MAX_LIST_SIZE; i++) {
+        if(L->next[i] == -2) { slot = i; break; }
     }
-    
-    newNode->next = temp->next;
-    temp->next = newNode;
+    if (slot == -1) return -1;
+    L->data[slot] = value;
+
+    int curr = L->head;
+    for (int i = 0; i < pos - 1; i++) {
+        curr = L->next[curr];
+    }
+
+    L->next[slot] = L->next[curr];
+    L->next[curr] = slot;
     L->size++;
     return 0;
 }
 
-int deleteBeginning(List* L) {
-    if (L->head == NULL) return -1;
+int deleteBeginning(ArrayList* L) {
+    if (L->head == -1) return -1;
+    int targetSlot = L->head;
+    int val = L->data[targetSlot];
     
-    Node* temp = L->head;
-    int deletedValue = temp->data;
-    L->head = L->head->next;
-    free(temp);
+    L->head = L->next[targetSlot];
+    L->next[targetSlot] = -2; // mark free
     L->size--;
-    return deletedValue;
+    return val;
 }
 
-int deleteEnd(List* L) {
-    if (L->head == NULL) return -1;
-    
-    if (L->head->next == NULL) {
-        Node* temp = L->head;
-        int deletedValue = temp->data;
-        L->head = NULL;
-        free(temp);
-        L->size--;
-        return deletedValue;
+int deleteEnd(ArrayList* L) {
+    if (L->head == -1) return -1;
+    if (L->next[L->head] == -1) return deleteBeginning(L);
+
+    int curr = L->head;
+    while (L->next[L->next[curr]] != -1) {
+        curr = L->next[curr];
     }
-    
-    Node* temp = L->head;
-    while (temp->next->next != NULL) {
-        temp = temp->next;
-    }
-    
-    Node* toDelete = temp->next;
-    int deletedValue = toDelete->data;
-    temp->next = NULL;
-    free(toDelete);
+
+    int targetSlot = L->next[curr];
+    int val = L->data[targetSlot];
+    L->next[curr] = -1;
+    L->next[targetSlot] = -2;
     L->size--;
-    return deletedValue;
+    return val;
 }
 
-int deleteByValue(List* L, int value) {
-    if (L->head == NULL) return -1;
-    
-    if (L->head->data == value) {
-        Node* temp = L->head;
-        L->head = L->head->next;
-        free(temp);
-        L->size--;
+int deleteByValue(ArrayList* L, int value) {
+    if (L->head == -1) return -1;
+    if (L->data[L->head] == value) {
+        deleteBeginning(L);
         return 0;
     }
-    
-    Node* current = L->head;
-    Node* prev = NULL;
-    while (current != NULL && current->data != value) {
-        prev = current;
-        current = current->next;
+
+    int curr = L->head;
+    while (L->next[curr] != -1 && L->data[L->next[curr]] != value) {
+        curr = L->next[curr];
     }
-    
-    if (current == NULL) return -1;
-    
-    prev->next = current->next;
-    free(current);
+
+    if (L->next[curr] == -1) return -1;
+
+    int targetSlot = L->next[curr];
+    L->next[curr] = L->next[targetSlot];
+    L->next[targetSlot] = -2;
     L->size--;
     return 0;
 }
 
-Node* searchValue(List* L, int value) {
-    Node* temp = L->head;
-    while (temp != NULL) {
-        if (temp->data == value) {
-            return temp;
-        }
-        temp = temp->next;
+int searchValue(ArrayList* L, int value) {
+    int curr = L->head;
+    while (curr != -1) {
+        if (L->data[curr] == value) return curr;
+        curr = L->next[curr];
     }
-    return NULL;
+    return -1;
 }
 
-void displayList(List* L) {
-    Node* temp = L->head;
-    while (temp != NULL) {
-        printf("%d → ", temp->data);
-        temp = temp->next;
+void displayList(ArrayList* L) {
+    int curr = L->head;
+    while (curr != -1) {
+        printf("%d → ", L->data[curr]);
+        curr = L->next[curr];
     }
     printf("NULL\n");
 }
 
-void reverseList(List* L) {
-    Node* prev = NULL;
-    Node* current = L->head;
-    Node* next = NULL;
-    
-    while (current != NULL) {
-        next = current->next;
-        current->next = prev;
-        prev = current;
-        current = next;
+void reverseList(ArrayList* L) {
+    int prev = -1;
+    int curr = L->head;
+    int nextNode;
+
+    while (curr != -1) {
+        nextNode = L->next[curr];
+        L->next[curr] = prev;
+        prev = curr;
+        curr = nextNode;
     }
     L->head = prev;
 }
 
-void sortListBubble(List* L) {
-    if (L->head == NULL || L->head->next == NULL) return;
-    
+void sortListBubble(ArrayList* L) {
+    if (L->head == -1 || L->next[L->head] == -1) return;
     int swapped;
-    Node* ptr1;
-    Node* lptr = NULL;
-    
+    int curr;
     do {
         swapped = 0;
-        ptr1 = L->head;
-        
-        while (ptr1->next != lptr) {
-            if (ptr1->data > ptr1->next->data) {
-                int temp = ptr1->data;
-                ptr1->data = ptr1->next->data;
-                ptr1->next->data = temp;
+        curr = L->head;
+        while (L->next[curr] != -1) {
+            if (L->data[curr] > L->data[L->next[curr]]) {
+                int temp = L->data[curr];
+                L->data[curr] = L->data[L->next[curr]];
+                L->data[L->next[curr]] = temp;
                 swapped = 1;
             }
-            ptr1 = ptr1->next;
+            curr = L->next[curr];
         }
-        lptr = ptr1;
     } while (swapped);
 }
 
-void mergeSortedLists(List* A, List* B, List* result) {
-    initList(result);
-    Node* currA = A->head;
-    Node* currB = B->head;
-    
-    while (currA != NULL && currB != NULL) {
-        if (currA->data <= currB->data) {
-            insertEnd(result, currA->data);
-            currA = currA->next;
-        } else {
-            insertEnd(result, currB->data);
-            currB = currB->next;
-        }
-    }
-    
-    while (currA != NULL) {
-        insertEnd(result, currA->data);
-        currA = currA->next;
-    }
-    
-    while (currB != NULL) {
-        insertEnd(result, currB->data);
-        currB = currB->next;
-    }
-}
-
-/* --- Doubly Linked List Implementation --- */
+/* --- Cursor DLL --- */
 
 void initListDLL(DLL* L) {
-    L->head = NULL;
-    L->tail = NULL;
+    L->head = -1;
+    L->tail = -1;
     L->size = 0;
+    for(int i=0; i<MAX_LIST_SIZE; i++) {
+        L->next[i] = -2;
+    }
 }
 
 int insertBeginningDLL(DLL* L, int value) {
-    DLLNode* newNode = (DLLNode*)malloc(sizeof(DLLNode));
-    if (newNode == NULL) return -1;
-    
-    newNode->data = value;
-    newNode->prev = NULL;
-    newNode->next = L->head;
-    
-    if (L->head == NULL) {
-        L->tail = newNode;
-    } else {
-        L->head->prev = newNode;
+    if (L->size >= MAX_LIST_SIZE) return -1;
+    int slot = -1;
+    for(int i=0; i<MAX_LIST_SIZE; i++) {
+        if(L->next[i] == -2) { slot = i; break; }
     }
-    
-    L->head = newNode;
+    if (slot == -1) return -1;
+
+    L->data[slot] = value;
+    L->next[slot] = L->head;
+    L->prev[slot] = -1;
+
+    if (L->head == -1) {
+        L->tail = slot;
+    } else {
+        L->prev[L->head] = slot;
+    }
+    L->head = slot;
     L->size++;
     return 0;
 }
 
 int insertEndDLL(DLL* L, int value) {
-    if (L->tail == NULL) {
-        return insertBeginningDLL(L, value);
+    if (L->tail == -1) return insertBeginningDLL(L, value);
+    if (L->size >= MAX_LIST_SIZE) return -1;
+
+    int slot = -1;
+    for(int i=0; i<MAX_LIST_SIZE; i++) {
+        if(L->next[i] == -2) { slot = i; break; }
     }
-    
-    DLLNode* newNode = (DLLNode*)malloc(sizeof(DLLNode));
-    if (newNode == NULL) return -1;
-    
-    newNode->data = value;
-    newNode->next = NULL;
-    newNode->prev = L->tail;
-    
-    L->tail->next = newNode;
-    L->tail = newNode;
+    if (slot == -1) return -1;
+
+    L->data[slot] = value;
+    L->next[slot] = -1;
+    L->prev[slot] = L->tail;
+
+    L->next[L->tail] = slot;
+    L->tail = slot;
     L->size++;
     return 0;
 }
 
 int deleteByValueDLL(DLL* L, int value) {
-    DLLNode* temp = L->head;
-    
-    while (temp != NULL && temp->data != value) {
-        temp = temp->next;
+    int curr = L->head;
+    while (curr != -1 && L->data[curr] != value) {
+        curr = L->next[curr];
     }
-    
-    if (temp == NULL) return -1;
-    
-    if (temp == L->head) {
-        L->head = temp->next;
-        if (L->head != NULL) {
-            L->head->prev = NULL;
-        } else {
-            L->tail = NULL;
-        }
-    } else if (temp == L->tail) {
-        L->tail = temp->prev;
-        if (L->tail != NULL) {
-            L->tail->next = NULL;
-        } else {
-            L->head = NULL;
-        }
+    if (curr == -1) return -1;
+
+    if (curr == L->head) {
+        L->head = L->next[curr];
+        if (L->head != -1) L->prev[L->head] = -1;
+        else L->tail = -1;
+    } else if (curr == L->tail) {
+        L->tail = L->prev[curr];
+        if (L->tail != -1) L->next[L->tail] = -1;
+        else L->head = -1;
     } else {
-        temp->prev->next = temp->next;
-        temp->next->prev = temp->prev;
+        L->next[L->prev[curr]] = L->next[curr];
+        L->prev[L->next[curr]] = L->prev[curr];
     }
-    
-    free(temp);
+
+    L->next[curr] = -2;
     L->size--;
     return 0;
 }
 
 void displayForward(DLL* L) {
-    DLLNode* temp = L->head;
-    while (temp != NULL) {
-        printf("%d ", temp->data);
-        temp = temp->next;
+    int curr = L->head;
+    while (curr != -1) {
+        printf("%d ", L->data[curr]);
+        curr = L->next[curr];
     }
     printf("\n");
 }
 
 void displayBackward(DLL* L) {
-    DLLNode* temp = L->tail;
-    while (temp != NULL) {
-        printf("%d ", temp->data);
-        temp = temp->prev;
+    int curr = L->tail;
+    while (curr != -1) {
+        printf("%d ", L->data[curr]);
+        curr = L->prev[curr];
     }
     printf("\n");
 }
