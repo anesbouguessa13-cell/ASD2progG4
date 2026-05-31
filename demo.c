@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include "include/array.h"
-//#include "include/linked_list.h"
-//#include "include/stack.h"
-//#include "include/queue.h"
-//#include "include/file_utils.h"
+#include "include/linked_list.h"
+#include "include/stack.h"
+#include "include/queue.h"
+#include "include/file_utils.h"
 #include "include/string_utils.h"
 #include<string.h>
 #include <stdlib.h>
@@ -248,10 +248,512 @@ void string_utils() {
         }
     } while (choice != 0);
 }
+
+void linkedListMenu() {
+    List sll;
+    DLL dll;
+    initList(&sll);
+    initListDLL(&dll);
+
+    // Temp variables for demo lists used in merge operations
+    List listA, listB, mergeResult;
+
+    int choice, val, pos, res;
+    Node* searchRes = NULL;
+
+    while (1) {
+        printf("\n=========================================\n");
+        printf("       LINKED LIST OPERATIONS MENU       \n");
+        printf("=========================================\n");
+        printf(" [Singly Linked List (SLL)]\n");
+        printf("  1. Insert at Beginning    2. Insert at End\n");
+        printf("  3. Insert at Position     4. Delete from Beginning\n");
+        printf("  5. Delete from End        6. Delete by Value\n");
+        printf("  7. Search for Value       8. Display List\n");
+        printf("  9. Reverse List          10. Bubble Sort List\n");
+        printf(" 11. Test Merge Sorted Lists\n");
+        printf("-----------------------------------------\n");
+        printf(" [Doubly Linked List (DLL)]\n");
+        printf(" 12. Insert DLL Start      13. Insert DLL End\n");
+        printf(" 14. Delete DLL by Value   15. Display DLL Forward\n");
+        printf(" 16. Display DLL Backward\n");
+        printf("-----------------------------------------\n");
+        printf("  0. Back to Main Module Menu\n");
+        printf("=========================================\n");
+        printf("Enter your choice: ");
+        
+        if (scanf("%d", &choice) != 1) {
+            printf("Invalid input. Please enter a number.\n");
+            while (getchar() != '\n'); // clear buffer
+            continue;
+        }
+
+        if (choice == 0) {
+            printf("Exiting Linked List Module.\n");
+            break;
+        }
+
+        switch (choice) {
+            /* --- SLL Operations --- */
+            case 1:
+                printf("Enter value to insert at start: ");
+                scanf("%d", &val);
+                if (insertBeginning(&sll, val) == 0) printf("Successfully inserted %d.\n", val);
+                else printf("Memory allocation failed.\n");
+                break;
+
+            case 2:
+                printf("Enter value to insert at end: ");
+                scanf("%d", &val);
+                if (insertEnd(&sll, val) == 0) printf("Successfully inserted %d.\n", val);
+                else printf("Memory allocation failed.\n");
+                break;
+
+            case 3:
+                printf("Enter position (0 to %d) and value: ", sll.size);
+                scanf("%d %d", &pos, &val);
+                if (insertAtPosition(&sll, pos, val) == 0) printf("Successfully inserted %d at position %d.\n", val, pos);
+                else printf("Invalid position or allocation failed.\n");
+                break;
+
+            case 4:
+                res = deleteBeginning(&sll);
+                if (res != -1) printf("Deleted value: %d\n", res);
+                else printf("List is already empty.\n");
+                break;
+
+            case 5:
+                res = deleteEnd(&sll);
+                if (res != -1) printf("Deleted value: %d\n", res);
+                else printf("List is already empty.\n");
+                break;
+
+            case 6:
+                printf("Enter value to delete: ");
+                scanf("%d", &val);
+                if (deleteByValue(&sll, val) == 0) printf("Successfully deleted %d.\n", val);
+                else printf("Value %d not found or list empty.\n", val);
+                break;
+
+            case 7:
+                printf("Enter value to search: ");
+                scanf("%d", &val);
+                searchRes = searchValue(&sll, val);
+                if (searchRes != NULL) printf("Value found at node memory location: %p\n", (void*)searchRes);
+                else printf("Value %d not found in the list.\n", val);
+                break;
+
+            case 8:
+                printf("SLL Current State: ");
+                displayList(&sll);
+                break;
+
+            case 9:
+                reverseList(&sll);
+                printf("List reversed successfully. New state: ");
+                displayList(&sll);
+                break;
+
+            case 10:
+                sortListBubble(&sll);
+                printf("List sorted via Bubble Sort. New state: ");
+                displayList(&sll);
+                break;
+
+            case 11:
+                printf("Creating mock sorted Lists A and B to test merging...\n");
+                initList(&listA); initList(&listB);
+                insertEnd(&listA, 10); insertEnd(&listA, 30); insertEnd(&listA, 50);
+                insertEnd(&listB, 20); insertEnd(&listB, 40); insertEnd(&listB, 60);
+                
+                printf("List A: "); displayList(&listA);
+                printf("List B: "); displayList(&listB);
+                
+                mergeSortedLists(&listA, &listB, &mergeResult);
+                printf("Merged Result List: ");
+                displayList(&mergeResult);
+                break;
+
+            /* --- DLL Operations --- */
+            case 12:
+                printf("Enter value to insert at DLL start: ");
+                scanf("%d", &val);
+                if (insertBeginningDLL(&dll, val) == 0) printf("Successfully inserted %d into DLL.\n", val);
+                else printf("Memory allocation failed.\n");
+                break;
+
+            case 13:
+                printf("Enter value to insert at DLL end: ");
+                scanf("%d", &val);
+                if (insertEndDLL(&dll, val) == 0) printf("Successfully inserted %d into DLL.\n", val);
+                else printf("Memory allocation failed.\n");
+                break;
+
+            case 14:
+                printf("Enter value to delete from DLL: ");
+                scanf("%d", &val);
+                if (deleteByValueDLL(&dll, val) == 0) printf("Successfully deleted %d from DLL.\n", val);
+                else printf("Value %d not found in DLL.\n", val);
+                break;
+
+            case 15:
+                printf("DLL Forward Display: ");
+                displayForward(&dll);
+                break;
+
+            case 16:
+                printf("DLL Backward Display: ");
+                displayBackward(&dll);
+                break;
+
+            default:
+                printf("Invalid selection option. Try again.\n");
+        }
+    }
+}
+
+void stackMenu() {
+    Stack s;
+    initStack(&s);
+
+    int choice, val, res;
+
+    while (1) {
+        printf("\n=========================================\n");
+        printf("        STACK OPERATIONS MENU (ARRAY)    \n");
+        printf("=========================================\n");
+        printf("  1. Push (Insert Element)\n");
+        printf("  2. Pop (Remove Element)\n");
+        printf("  3. Peek (Inspect Top Element)\n");
+        printf("  4. Check if Empty\n");
+        printf("  5. Check if Full\n");
+        printf("  6. Display Stack State\n");
+        printf("-----------------------------------------\n");
+        printf("  0. Back to Main Module Menu\n");
+        printf("=========================================\n");
+        printf("Enter your choice: ");
+
+        if (scanf("%d", &choice) != 1) {
+            printf("Invalid input. Please enter a number.\n");
+            while (getchar() != '\n'); // clear buffer
+            continue;
+        }
+
+        if (choice == 0) {
+            printf("Exiting Stack Module.\n");
+            break;
+        }
+
+        switch (choice) {
+            case 1:
+                printf("Enter value to push onto stack: ");
+                scanf("%d", &val);
+                if (push(&s, val) == 0) {
+                    printf("Successfully pushed %d onto the stack.\n", val);
+                } else {
+                    printf("Stack Overflow! Cannot push %d, stack is full.\n", val);
+                }
+                break;
+
+            case 2:
+                res = pop(&s);
+                if (res != INT_MIN) {
+                    printf("Popped value: %d\n", res);
+                } else {
+                    printf("Stack Underflow! The stack is empty.\n");
+                }
+                break;
+
+            case 3:
+                res = peek(&s);
+                if (res != INT_MIN) {
+                    printf("Top element is: %d\n", res);
+                } else {
+                    printf("Stack is empty. Nothing to peek.\n");
+                }
+                break;
+
+            case 4:
+                if (isEmpty(&s)) {
+                    printf("The stack is currently EMPTY.\n");
+                } else {
+                    printf("The stack is NOT empty (%d element(s) inside).\n", s.top + 1);
+                }
+                break;
+
+            case 5:
+                if (isFull(&s)) {
+                    printf("The stack is currently FULL.\n");
+                } else {
+                    printf("The stack is NOT full (%d/%d slots used).\n", s.top + 1, MAX_STACK_SIZE);
+                }
+                break;
+
+            case 6:
+                if (isEmpty(&s)) {
+                    printf("Stack [ ] <- Top (Empty)\n");
+                } else {
+                    printf("Stack content (Top to Bottom):\n");
+                    for (int i = s.top; i >= 0; i--) {
+                        if (i == s.top) {
+                            printf(" [%d] <- Top\n", s.data[i]);
+                        } else {
+                            printf(" [%d]\n", s.data[i]);
+                        }
+                    }
+                }
+                break;
+
+            default:
+                printf("Invalid selection option. Try again.\n");
+        }
+    }
+}
+void queueMenu() {
+    Queue q;
+    initQueue(&q);
+
+    int choice, val, res;
+
+    while (1) {
+        printf("\n=========================================\n");
+        printf("    QUEUE OPERATIONS MENU (CIRCULAR)     \n");
+        printf("=========================================\n");
+        printf("  1. Enqueue (Insert Element at Rear)\n");
+        printf("  2. Dequeue (Remove Element from Front)\n");
+        printf("  3. Peek Front Element\n");
+        printf("  4. Peek Rear Element\n");
+        printf("  5. Check Status (Empty / Full / Size)\n");
+        printf("  6. Display Queue State\n");
+        printf("-----------------------------------------\n");
+        printf("  0. Back to Main Module Menu\n");
+        printf("=========================================\n");
+        printf("Enter your choice: ");
+
+        if (scanf("%d", &choice) != 1) {
+            printf("Invalid input. Please enter a number.\n");
+            while (getchar() != '\n'); // clear buffer
+            continue;
+        }
+
+        if (choice == 0) {
+            printf("Exiting Queue Module.\n");
+            break;
+        }
+
+        switch (choice) {
+            case 1:
+                printf("Enter value to enqueue: ");
+                scanf("%d", &val);
+                if (enqueue(&q, val) == 0) {
+                    printf("Successfully enqueued %d.\n", val);
+                } else {
+                    printf("Queue Overflow! Cannot enqueue %d, queue is full.\n", val);
+                }
+                break;
+
+            case 2:
+                res = dequeue(&q);
+                if (res != INT_MIN) {
+                    printf("Dequeued value: %d\n", res);
+                } else {
+                    printf("Queue Underflow! The queue is empty.\n");
+                }
+                break;
+
+            case 3:
+                res = front(&q);
+                if (res != INT_MIN) {
+                    printf("Front element is: %d\n", res);
+                } else {
+                    printf("Queue is empty. No front element.\n");
+                }
+                break;
+
+            case 4:
+                res = rear(&q);
+                if (res != INT_MIN) {
+                    printf("Rear element is: %d\n", res);
+                } else {
+                    printf("Queue is empty. No rear element.\n");
+                }
+                break;
+
+            case 5:
+                printf("Queue status:\n");
+                printf("  - Count: %d / %d slots used.\n", q.count, MAX_QUEUE_SIZE);
+                printf("  - Status: %s\n", (q.count == 0) ? "EMPTY" : (q.count == MAX_QUEUE_SIZE) ? "FULL" : "AVAILABLE");
+                printf("  - Front index: %d, Rear index: %d\n", q.front, q.rear);
+                break;
+
+            case 6:
+                if (q.count == 0) {
+                    printf("Queue: [ Empty ]\n");
+                } else {
+                    printf("Queue elements from Front to Rear:\n");
+                    printf("Front -> ");
+                    for (int i = 0; i < q.count; i++) {
+                        int index = (q.front + i) % MAX_QUEUE_SIZE;
+                        printf("[%d] ", q.data[index]);
+                    }
+                    printf("<- Rear\n");
+                }
+                break;
+
+            default:
+                printf("Invalid selection option. Try again.\n");
+        }
+    }
+}
+void fileMenu() {
+    const char* defaultFile = "records.dat";
+    const char* backupFile = "records_backup.dat";
     
+    int choice, val, res;
+    Record r;
 
- 
+    while (1) {
+        printf("\n=========================================\n");
+        printf("       BINARY FILE OPERATIONS MENU       \n");
+        printf("=========================================\n");
+        printf(" Current active file: %s\n", defaultFile);
+        printf("-----------------------------------------\n");
+        printf("  1. Create / Clear Binary File\n");
+        printf("  2. Write / Append New Record\n");
+        printf("  3. Read Record by Index Position\n");
+        printf("  4. Count Total Records inside File\n");
+        printf("  5. Search for Record by ID\n");
+        printf("  6. Update Existing Record by Index\n");
+        printf("  7. Backup Data (Copy to %s)\n", backupFile);
+        printf("  8. Print All Records (View File)\n");
+        printf("-----------------------------------------\n");
+        printf("  0. Back to Main Module Menu\n");
+        printf("=========================================\n");
+        printf("Enter your choice: ");
 
+        if (scanf("%d", &choice) != 1) {
+            printf("Invalid input. Please enter a number.\n");
+            while (getchar() != '\n'); // clear buffer
+            continue;
+        }
+
+        if (choice == 0) {
+            printf("Exiting File I/O Module.\n");
+            break;
+        }
+
+        switch (choice) {
+            case 1:
+                if (createBinaryFile(defaultFile) == 0) {
+                    printf("Successfully created/truncated binary storage file '%s'.\n", defaultFile);
+                } else {
+                    printf("Error: Could not create binary storage file.\n");
+                }
+                break;
+
+            case 2:
+                printf("\n--- Enter Record Data ---\n");
+                printf("ID: "); scanf("%d", &r.id);
+                printf("Name (no spaces): "); scanf("%49s", r.name);
+                printf("Score: "); scanf("%f", &r.score);
+                printf("Category: "); scanf("%19s", r.category);
+
+                if (appendRecord(defaultFile, &r) == 0) {
+                    printf("Record successfully written to file.\n");
+                } else {
+                    printf("Error: Failed to write record data.\n");
+                }
+                break;
+
+            case 3:
+                printf("Enter target record index position to read: ");
+                scanf("%d", &val);
+                if (readRecord(defaultFile, val, &r) == 0) {
+                    printf("\n[Record at Index %d]\n", val);
+                    printf("ID:       %d\n", r.id);
+                    printf("Name:     %s\n", r.name);
+                    printf("Score:    %.2f\n", r.score);
+                    printf("Category: %s\n", r.category);
+                } else {
+                    printf("Error: Index position out of range or file unreadable.\n");
+                }
+                break;
+
+            case 4:
+                res = countRecords(defaultFile);
+                if (res >= 0) {
+                    printf("Total valid records inside file: %d\n", res);
+                } else {
+                    printf("Could not open file, or file does not exist yet.\n");
+                }
+                break;
+
+            case 5:
+                printf("Enter target ID number to find: ");
+                scanf("%d", &val);
+                res = searchRecordById(defaultFile, val, &r);
+                if (res != -1) {
+                    printf("Record Found at File Index Location: %d\n", res);
+                    printf(" -> ID: %d | Name: %s | Score: %.2f | Cat: %s\n", r.id, r.name, r.score, r.category);
+                } else {
+                    printf("No record matching ID %d found.\n", val);
+                }
+                break;
+
+            case 6:
+                printf("Enter index position to update: ");
+                scanf("%d", &val);
+                
+                // Confirm entry exists first
+                if (readRecord(defaultFile, val, &r) != 0) {
+                    printf("Error: Index location invalid. Cannot overwrite nonexistent data.\n");
+                    break;
+                }
+                
+                printf("Current details: ID: %d, Name: %s\n", r.id, r.name);
+                printf("\n--- Enter NEW Data for this position ---\n");
+                printf("New ID: "); scanf("%d", &r.id);
+                printf("New Name (no spaces): "); scanf("%49s", r.name);
+                printf("New Score: "); scanf("%f", &r.score);
+                printf("New Category: "); scanf("%19s", r.category);
+
+                if (updateRecord(defaultFile, val, &r) == 0) {
+                    printf("Record at index %d successfully altered.\n", val);
+                } else {
+                    printf("Error performing binary update instruction.\n");
+                }
+                break;
+
+            case 7:
+                if (copyBinaryFile(defaultFile, backupFile) == 0) {
+                    printf("Backup operation successful. Created clone layout inside '%s'.\n", backupFile);
+                } else {
+                    printf("Error copying source tracks over to target.\n");
+                }
+                break;
+
+            case 8:
+                res = countRecords(defaultFile);
+                if (res <= 0) {
+                    printf("File is empty or missing. Add a record first!\n");
+                } else {
+                    printf("\n%-6s %-15s %-8s %-15s\n", "Index", "ID (Name)", "Score", "Category");
+                    printf("----------------------------------------------------\n");
+                    for (int i = 0; i < res; i++) {
+                        if (readRecord(defaultFile, i, &r) == 0) {
+                            char idNameBuf[65];
+                            sprintf(idNameBuf, "%d (%s)", r.id, r.name);
+                            printf("[%-4d] %-15s %-8.2f %-15s\n", i, idNameBuf, r.score, r.category);
+                        }
+                    }
+                }
+                break;
+
+            default:
+                printf("Invalid selection option. Try again.\n");
+        }
+    }
+}
 
 int main() {
     int choice;
@@ -262,6 +764,10 @@ int main() {
         scanf("%d", &choice);
         switch(choice) {
             case 1: arrayMenu(); break;
+            case 2: linkedListMenu() ;break;
+            case 3: stackMenu(); break;
+            case 4: queueMenu();break;
+            case 5: fileMenu();break;
             case 6: string_utils();break;
         }
     } while (choice != 0);
