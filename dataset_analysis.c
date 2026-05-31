@@ -2,9 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <float.h>
-#include "../include/common.h" 
+#include "include/common.h" // Fixed path to match the root folder location
 
-
+// ============================================================================
+// FUNCTION PROTOTYPES
+// ============================================================================
 int loadDataset(const char* filename, Record arr[], int* count);
 void displayDataset(Record arr[], int count);
 void sortDatasetByField(Record arr[], int count, char* field);
@@ -15,7 +17,9 @@ int filterByCondition(Record arr[], int count, float threshold, Record out[]);
 int saveBinaryReport(const char* filename, Record arr[], int count);
 void datasetAnalysisMenu();
 
-
+// ============================================================================
+// CORE DATA COMPUTATION LOGIC
+// ============================================================================
 
 int loadDataset(const char* filename, Record arr[], int* count) {
     FILE* fp = fopen(filename, "rb");
@@ -25,7 +29,6 @@ int loadDataset(const char* filename, Record arr[], int* count) {
     }
     
     int i = 0;
-    // Load elements up to the MAX_1D array size restriction inside common.h
     while (i < MAX_1D && fread(&arr[i], sizeof(Record), 1, fp) == 1) {
         i++;
     }

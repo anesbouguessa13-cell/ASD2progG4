@@ -9,11 +9,19 @@
 #define MAX_QUEUE_SIZE  50
 #define MAX_STRING_LEN  256
 
+/* Core Record Struct shared by File Handling & Data Analysis */
+typedef struct {
+    int   id;
+    char  name[50];
+    float score;          
+    char  category[20];   
+} Record;
+
 /* Cursor-based singly linked list */
 typedef struct {
     int data[MAX_LIST_SIZE];
     int next[MAX_LIST_SIZE];   // next[i] = index of successor, -1 = end
-    int head;                   // index of first element, -1 = empty
+    int head;                  // index of first element, -1 = empty
     int size;
 } ArrayList;
 
