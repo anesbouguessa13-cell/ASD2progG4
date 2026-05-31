@@ -249,34 +249,31 @@ void string_utils() {
     } while (choice != 0);
 }
 
+
+
 void linkedListMenu() {
-    List sll;
+    ArrayList sll;
     DLL dll;
     initList(&sll);
     initListDLL(&dll);
 
-    // Temp variables for demo lists used in merge operations
-    List listA, listB, mergeResult;
-
     int choice, val, pos, res;
-    Node* searchRes = NULL;
 
     while (1) {
         printf("\n=========================================\n");
-        printf("       LINKED LIST OPERATIONS MENU       \n");
+        printf("    CURSOR-BASED LINKED LIST MENU        \n");
         printf("=========================================\n");
-        printf(" [Singly Linked List (SLL)]\n");
+        printf(" [ArrayList (Singly Linked Layout)]\n");
         printf("  1. Insert at Beginning    2. Insert at End\n");
         printf("  3. Insert at Position     4. Delete from Beginning\n");
         printf("  5. Delete from End        6. Delete by Value\n");
         printf("  7. Search for Value       8. Display List\n");
         printf("  9. Reverse List          10. Bubble Sort List\n");
-        printf(" 11. Test Merge Sorted Lists\n");
         printf("-----------------------------------------\n");
-        printf(" [Doubly Linked List (DLL)]\n");
-        printf(" 12. Insert DLL Start      13. Insert DLL End\n");
-        printf(" 14. Delete DLL by Value   15. Display DLL Forward\n");
-        printf(" 16. Display DLL Backward\n");
+        printf(" [Doubly Linked Array Layout (DLL)]\n");
+        printf(" 11. Insert DLL Start      12. Insert DLL End\n");
+        printf(" 13. Delete DLL by Value   14. Display DLL Forward\n");
+        printf(" 15. Display DLL Backward\n");
         printf("-----------------------------------------\n");
         printf("  0. Back to Main Module Menu\n");
         printf("=========================================\n");
@@ -294,26 +291,26 @@ void linkedListMenu() {
         }
 
         switch (choice) {
-            /* --- SLL Operations --- */
+            /* --- SLL Array Operations --- */
             case 1:
                 printf("Enter value to insert at start: ");
                 scanf("%d", &val);
                 if (insertBeginning(&sll, val) == 0) printf("Successfully inserted %d.\n", val);
-                else printf("Memory allocation failed.\n");
+                else printf("Error: Array storage structure full.\n");
                 break;
 
             case 2:
                 printf("Enter value to insert at end: ");
                 scanf("%d", &val);
                 if (insertEnd(&sll, val) == 0) printf("Successfully inserted %d.\n", val);
-                else printf("Memory allocation failed.\n");
+                else printf("Error: Array storage structure full.\n");
                 break;
 
             case 3:
                 printf("Enter position (0 to %d) and value: ", sll.size);
                 scanf("%d %d", &pos, &val);
                 if (insertAtPosition(&sll, pos, val) == 0) printf("Successfully inserted %d at position %d.\n", val, pos);
-                else printf("Invalid position or allocation failed.\n");
+                else printf("Error: Invalid position index or list structure full.\n");
                 break;
 
             case 4:
@@ -338,9 +335,9 @@ void linkedListMenu() {
             case 7:
                 printf("Enter value to search: ");
                 scanf("%d", &val);
-                searchRes = searchValue(&sll, val);
-                if (searchRes != NULL) printf("Value found at node memory location: %p\n", (void*)searchRes);
-                else printf("Value %d not found in the list.\n", val);
+                res = searchValue(&sll, val);
+                if (res != -1) printf("Value found at internal array index slot: %d\n", res);
+                else printf("Value %d not found in storage tracks.\n", val);
                 break;
 
             case 8:
@@ -350,58 +347,44 @@ void linkedListMenu() {
 
             case 9:
                 reverseList(&sll);
-                printf("List reversed successfully. New state: ");
+                printf("List links reversed. New structure track: ");
                 displayList(&sll);
                 break;
 
             case 10:
                 sortListBubble(&sll);
-                printf("List sorted via Bubble Sort. New state: ");
+                printf("List bubble sorted. New structure track: ");
                 displayList(&sll);
                 break;
 
+            /* --- DLL Array Operations --- */
             case 11:
-                printf("Creating mock sorted Lists A and B to test merging...\n");
-                initList(&listA); initList(&listB);
-                insertEnd(&listA, 10); insertEnd(&listA, 30); insertEnd(&listA, 50);
-                insertEnd(&listB, 20); insertEnd(&listB, 40); insertEnd(&listB, 60);
-                
-                printf("List A: "); displayList(&listA);
-                printf("List B: "); displayList(&listB);
-                
-                mergeSortedLists(&listA, &listB, &mergeResult);
-                printf("Merged Result List: ");
-                displayList(&mergeResult);
-                break;
-
-            /* --- DLL Operations --- */
-            case 12:
                 printf("Enter value to insert at DLL start: ");
                 scanf("%d", &val);
-                if (insertBeginningDLL(&dll, val) == 0) printf("Successfully inserted %d into DLL.\n", val);
-                else printf("Memory allocation failed.\n");
+                if (insertBeginningDLL(&dll, val) == 0) printf("Successfully inserted %d into DLL tracker.\n", val);
+                else printf("Error: Array storage structure full.\n");
+                break;
+
+            case 12:
+                printf("Enter value to insert at DLL end: ");
+                scanf("%d", &val);
+                if (insertEndDLL(&dll, val) == 0) printf("Successfully inserted %d into DLL tracker.\n", val);
+                else printf("Error: Array storage structure full.\n");
                 break;
 
             case 13:
-                printf("Enter value to insert at DLL end: ");
+                printf("Enter value to delete from DLL: ");
                 scanf("%d", &val);
-                if (insertEndDLL(&dll, val) == 0) printf("Successfully inserted %d into DLL.\n", val);
-                else printf("Memory allocation failed.\n");
+                if (deleteByValueDLL(&dll, val) == 0) printf("Successfully deleted %d from DLL storage matrix.\n", val);
+                else printf("Value %d not found in DLL tracks.\n", val);
                 break;
 
             case 14:
-                printf("Enter value to delete from DLL: ");
-                scanf("%d", &val);
-                if (deleteByValueDLL(&dll, val) == 0) printf("Successfully deleted %d from DLL.\n", val);
-                else printf("Value %d not found in DLL.\n", val);
-                break;
-
-            case 15:
                 printf("DLL Forward Display: ");
                 displayForward(&dll);
                 break;
 
-            case 16:
+            case 15:
                 printf("DLL Backward Display: ");
                 displayBackward(&dll);
                 break;
