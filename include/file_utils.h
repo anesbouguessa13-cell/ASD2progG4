@@ -5,12 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct {
-    int   id;
-    char  name[50];
-    float score;
-    char  category[20];
-} Record;
+#include "common.h"
 
 int createBinaryFile(const char* filename);
 int writeRecord(const char* filename, Record* r);
