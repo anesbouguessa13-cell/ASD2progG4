@@ -8,7 +8,7 @@
 #include<string.h>
 #include <stdlib.h>
 
-// 1. MOVE MACROS OUTSIDE: Macros should be global, not inside a function.
+
 
 
 
